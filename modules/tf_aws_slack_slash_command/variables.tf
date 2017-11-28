@@ -6,10 +6,6 @@ variable "account_id" {
   type = "string"
 }
 
-variable "filename" {
-  type = "string"
-}
-
 variable "source_code_hash" {
   type = "string"
 }
@@ -36,4 +32,24 @@ variable "api_id" {
 
 variable "root_resource_id" {
   type = "string"
+}
+
+variable "environment_variables" {
+  type = "map"
+  default = {}
+}
+
+variable "filename" {
+  type = "string"
+  default = ""
+}
+
+variable "s3_bucket" {
+  type = "string",
+  default = ""
+}
+
+variable "s3_key" {
+  type = "string",
+  default = ""
 }

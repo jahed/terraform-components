@@ -41,15 +41,20 @@ resource "aws_iam_role_policy_attachment" "allow_logs" {
 }
 
 resource "aws_lambda_function" "handler" {
-  function_name = "slack_slash_command_${var.command}"
-  description   = "Handler for '/${var.command}' Slack Slash Command"
-  role          = "${aws_iam_role.lambda.arn}"
+  function_name    = "slack_slash_command_${var.command}"
+  description      = "Handler for '/${var.command}' Slack Slash Command"
+  role             = "${aws_iam_role.lambda.arn}"
 
   filename         = "${var.filename}"
+  s3_bucket        = "${var.s3_bucket}"
+  s3_key           = "${var.s3_key}"
   source_code_hash = "${var.source_code_hash}"
   runtime          = "${var.runtime}"
   handler          = "${var.handler}"
   timeout          = "${var.timeout}"
+  environment {
+    variables      = "${var.environment_variables}"
+  }
 }
 
 resource "aws_api_gateway_resource" "command" {
