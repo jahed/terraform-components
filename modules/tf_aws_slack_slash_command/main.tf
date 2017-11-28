@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "allow_assume_role" {
       "sts:AssumeRole"
     ]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = [
         "lambda.amazonaws.com",
         "apigateway.amazonaws.com"
@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "allow_logs" {
     resources = [
       "arn:aws:logs:${var.region}:${var.account_id}:log-group:/aws/lambda/${aws_lambda_function.handler.function_name}:*"
     ]
-    actions = [
+    actions   = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents"
@@ -27,16 +27,16 @@ data "aws_iam_policy_document" "allow_logs" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name = "slack_slash_command_${var.command}"
+  name               = "slack_slash_command_${var.command}"
   assume_role_policy = "${data.aws_iam_policy_document.allow_assume_role.json}"
 }
 
 resource "aws_iam_policy" "allow_logs" {
-  name = "slack_slash_command_allow_logs_${var.command}"
+  name   = "slack_slash_command_allow_logs_${var.command}"
   policy = "${data.aws_iam_policy_document.allow_logs.json}"
 }
 resource "aws_iam_role_policy_attachment" "allow_logs" {
-  role = "${aws_iam_role.lambda.name}"
+  role       = "${aws_iam_role.lambda.name}"
   policy_arn = "${aws_iam_policy.allow_logs.arn}"
 }
 
@@ -53,7 +53,7 @@ resource "aws_lambda_function" "handler" {
   handler          = "${var.handler}"
   timeout          = "${var.timeout}"
   environment {
-    variables      = "${var.environment_variables}"
+    variables = "${var.environment_variables}"
   }
 }
 
@@ -71,11 +71,11 @@ resource "aws_api_gateway_method" "command" {
 }
 
 resource "aws_api_gateway_integration" "command" {
-  rest_api_id = "${var.api_id}"
-  resource_id = "${aws_api_gateway_resource.command.id}"
-  http_method = "${aws_api_gateway_method.command.http_method}"
-  type        = "AWS_PROXY"
-  uri         = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.region}:${var.account_id}:function:${aws_lambda_function.handler.function_name}/invocations"
+  rest_api_id             = "${var.api_id}"
+  resource_id             = "${aws_api_gateway_resource.command.id}"
+  http_method             = "${aws_api_gateway_method.command.http_method}"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.region}:${var.account_id}:function:${aws_lambda_function.handler.function_name}/invocations"
   integration_http_method = "POST"
 }
 
@@ -85,14 +85,14 @@ resource "aws_lambda_permission" "allow_invoke" {
   function_name = "${aws_lambda_function.handler.arn}"
   principal     = "apigateway.amazonaws.com"
 
-  source_arn = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/${aws_api_gateway_method.command.http_method}${aws_api_gateway_resource.command.path}"
+  source_arn    = "arn:aws:execute-api:${var.region}:${var.account_id}:${var.api_id}/*/${aws_api_gateway_method.command.http_method}${aws_api_gateway_resource.command.path}"
 }
 
 resource "aws_api_gateway_deployment" "slack_slash_commands" {
-  depends_on = [
+  depends_on  = [
     "aws_api_gateway_method.command",
     "aws_api_gateway_integration.command"
   ]
   rest_api_id = "${var.api_id}"
-  stage_name = "slack_slash_commands"
+  stage_name  = "slack_slash_commands"
 }
