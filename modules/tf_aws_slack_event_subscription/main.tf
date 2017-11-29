@@ -51,7 +51,7 @@ resource "aws_lambda_function" "handler" {
   handler          = "${var.handler}"
   timeout          = "${var.timeout}"
   environment {
-    variables = "${var.environment_variables}"
+    variables = "${merge(map("terraformed", true), var.environment_variables)}"
   }
 }
 
