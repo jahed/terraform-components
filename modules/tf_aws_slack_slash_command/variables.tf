@@ -43,13 +43,3 @@ variable "filename" {
   type = "string"
   default = ""
 }
-
-variable "s3_bucket" {
-  type = "string",
-  default = ""
-}
-
-variable "s3_key" {
-  type = "string",
-  default = ""
-}

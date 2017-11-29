@@ -46,8 +46,6 @@ resource "aws_lambda_function" "handler" {
   role             = "${aws_iam_role.lambda.arn}"
 
   filename         = "${var.filename}"
-  s3_bucket        = "${var.s3_bucket}"
-  s3_key           = "${var.s3_key}"
   source_code_hash = "${var.source_code_hash}"
   runtime          = "${var.runtime}"
   handler          = "${var.handler}"
