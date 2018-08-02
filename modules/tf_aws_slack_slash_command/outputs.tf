@@ -4,5 +4,5 @@ output "command_url" {
 
 output "lambda_role_name" {
   description = "The IAM Role Name assigned to the Lambda. Use this for attaching more IAM Policies to the Lambda."
-  value = "${aws_iam_role.lambda.name}"
+  value       = "${aws_iam_role.lambda.name}"
 }

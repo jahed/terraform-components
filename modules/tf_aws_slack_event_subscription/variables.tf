@@ -35,11 +35,11 @@ variable "root_resource_id" {
 }
 
 variable "environment_variables" {
-  type = "map"
+  type    = "map"
   default = {}
 }
 
 variable "filename" {
-  type = "string"
+  type    = "string"
   default = ""
 }
