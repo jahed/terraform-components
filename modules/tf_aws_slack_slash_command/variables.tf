@@ -36,7 +36,9 @@ variable "root_resource_id" {
 
 variable "environment_variables" {
   type    = "map"
-  default = {}
+  default = {
+    "terraformed" = true
+  }
 }
 
 variable "filename" {
@@ -46,7 +48,5 @@ variable "filename" {
 
 variable "tags" {
   type    = "map"
-  default = {
-    "terraformed" = true
-  }
+  default = {}
 }
