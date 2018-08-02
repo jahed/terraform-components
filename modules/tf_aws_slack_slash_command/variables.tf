@@ -46,5 +46,7 @@ variable "filename" {
 
 variable "tags" {
   type    = "map"
-  default = {}
+  default = {
+    "terraformed" = true
+  }
 }
