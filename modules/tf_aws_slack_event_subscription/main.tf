@@ -48,6 +48,7 @@ resource "aws_lambda_function" "handler" {
   function_name = "slack_event_subscription_${var.app_name}"
   description   = "Handler for '${var.app_name}' Slack App's Event Subscription"
   role          = "${aws_iam_role.lambda.arn}"
+  tags          = "${var.tags}"
 
   filename         = "${var.filename}"
   source_code_hash = "${var.source_code_hash}"
